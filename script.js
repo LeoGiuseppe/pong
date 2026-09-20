@@ -1,13 +1,27 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let paddle = { x: 160, y: 370, width: 80, height: 10, speed: 6 };
-let ball = { x: 200, y: 200, radius: 8, dx: 3, dy: -3 };
+let paddle = { x: 160, y: 350, width: 100, height: 40, speed: 6 };
+let ball = { x: 200, y: 200, radius: 20, dx: 4, dy: -4 };
 let keys = {};
 let gameOver = false;
 
+const pancakeImg = new Image();
+pancakeImg.src = "Nuova cartella/66-664136_pancake-png-pancake-transparent-png.png";
+
+const panImg = new Image();
+panImg.src = "Nuova cartella/frying-pan-11530926183guoznjnlvy.png";
+
 window.addEventListener("keydown", e => keys[e.key] = true);
 window.addEventListener("keyup", e => keys[e.key] = false);
+
+function drawPaddle() {
+  ctx.drawImage(panImg, paddle.x, paddle.y, paddle.width, paddle.height);
+}
+
+function drawBall() {
+  ctx.drawImage(pancakeImg, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
+}
 
 function gameLoop() {
   if (gameOver) return;
@@ -45,23 +59,16 @@ function gameLoop() {
   // Disegna
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Racchetta
-  ctx.fillStyle = "white";
-  ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-
-  // Palla
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "white";
-  ctx.fill();
-  ctx.closePath();
+  drawPaddle();
+  drawBall();
 
   if (!gameOver) {
     requestAnimationFrame(gameLoop);
   } else {
     ctx.font = "20px Arial";
+    ctx.fillStyle = "#fff";
     ctx.fillText("GAME OVER", 140, 200);
   }
 }
 
-gameLoop();
+window.onload = gameLoop;
